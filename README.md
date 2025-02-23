@@ -21,3 +21,6 @@ In the Search Student Name: area, begin typing the student's name. Highlight the
 
 ## How to Delete Rosters
 Click on the Flush Data at the end of the semester to delete the old rosters from memory and prepare to add rosters for the next semester.
+
+## Download the Student Lookup App
+Download the app here: [Student_Lookup.app](www.dropbox.com/scl/fo/kw9d7h9j8hh5ayhnib3au/AKnY_ZPavaijGPaKBV4cRUQ?rlkey=7qb1s3zttnvcxmd6tc1b4r88i&st=0pavdsn8&dl=0)
