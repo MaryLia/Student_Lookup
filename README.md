@@ -1,5 +1,5 @@
 ## Student_Lookup
-A Python/Tkinter based app to quickly look up course and section number by student name
+A Python/Tkinter based app to quickly look up course and section numbers by student name. This should save time when a student e-mails you a question, but you don't know what class they are in.
 
 ## Requirements
 - Python 3.x
