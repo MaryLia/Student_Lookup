@@ -8,7 +8,7 @@ A Python/Tkinter based app to quickly look up course and section numbers by stud
 ## How to Run
 1. Clone this repo: `git clone https://github.com/MaryLia/Student-Lookup.git`
 2. `cd Student-Lookup`
-3. `python3 Student_Lookup.py`
+3. `pyinstaller Student_Lookup.spec`
 
 ## How to Add Rosters
 1. Download rosters from Cougarweb or from whatever source you have available.
