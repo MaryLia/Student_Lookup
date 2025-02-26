@@ -23,4 +23,4 @@ In the Search Student Name: area, begin typing the student's name. Highlight the
 Click on the Flush Data at the end of the semester to delete the old rosters from memory and prepare to add rosters for the next semester.
 
 ## Download the Student Lookup App
-Download the app on Dropbox here: [Student_Lookup.app for Mac and Student_Lookup.exe for Windows](https://www.dropbox.com/scl/fo/kw9d7h9j8hh5ayhnib3au/AKnY_ZPavaijGPaKBV4cRUQ?rlkey=7qb1s3zttnvcxmd6tc1b4r88i&st=0pavdsn8&dl=0)
+Download the app on Dropbox here: [Student_Lookup.app for Mac and StudentLookupSetup.exe for Windows](https://www.dropbox.com/scl/fo/kw9d7h9j8hh5ayhnib3au/AKnY_ZPavaijGPaKBV4cRUQ?rlkey=7qb1s3zttnvcxmd6tc1b4r88i&st=0pavdsn8&dl=0)
