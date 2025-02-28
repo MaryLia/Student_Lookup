@@ -1,5 +1,9 @@
-## Student_Lookup
+# Student_Lookup
 A Python/Tkinter based app to quickly look up course and section numbers by student name. This should save time when a student e-mails you a question, but you don't know what class they are in.
+
+# How to Install
+If you want to compile it yourself, see below.
+Easy download and install links are at the bottom of this page.
 
 ## Requirements
 - Python 3.x
@@ -9,6 +13,8 @@ A Python/Tkinter based app to quickly look up course and section numbers by stud
 1. Clone this repo: `git clone https://github.com/MaryLia/Student-Lookup.git`
 2. `cd Student-Lookup`
 3. `pyinstaller Student_Lookup.spec`
+
+# Instructions
 
 ## How to Add Rosters
 1. Download rosters from Cougarweb or from whatever source you have available.
