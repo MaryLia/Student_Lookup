@@ -12,7 +12,7 @@ Easy download and install links are at the bottom of this page.
 ## How to Run
 1. Clone this repo: `git clone https://github.com/MaryLia/Student-Lookup.git`
 2. `cd Student-Lookup`
-3. `pyinstaller Student_Lookup.spec`
+3. `pyinstaller build_app.py`
 
 # Instructions
 
