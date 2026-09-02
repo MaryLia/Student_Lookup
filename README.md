@@ -6,9 +6,9 @@ If you want to compile it yourself, see below.
 Easy download and install links are at the bottom of this page.
 
 ## Requirements
-- Python 3.x
+- Python 3.9+ with Tkinter (the python.org installers include it; on Homebrew, `brew install python-tk`)
 - `openpyxl` (to read the Excel roster files)
-- PyInstaller (if you want to build the .app)
+- PyInstaller (only if you want to build the standalone app)
 
 Install the dependencies with:
 
@@ -16,11 +16,35 @@ Install the dependencies with:
 pip install -r requirements.txt
 ```
 
-## How to Run
+## How to Run from source
 1. Clone this repo: `git clone https://github.com/MaryLia/Student_Lookup.git`
 2. `cd Student_Lookup`
 3. `pip install -r requirements.txt`
-4. Run the app directly with `python Student_Lookup.py`, or build a standalone app with `python build_app.py`.
+4. `python Student_Lookup.py`
+
+## How to Build the standalone app
+
+`python build_app.py` produces a single-file app for whatever OS you run it on:
+
+| Build host | Output |
+|------------|--------|
+| Windows    | `dist/Student_Lookup.exe` |
+| macOS      | `dist/Student_Lookup.app` |
+
+PyInstaller cannot cross-compile, so a Windows `.exe` must be built on Windows
+and a macOS `.app` on macOS. You don't need a second machine for this: the
+GitHub Actions workflow in `.github/workflows/build.yml` builds Windows, macOS
+(Intel) and macOS (Apple Silicon) on every push, and attaches all three to a
+GitHub Release when you push a version tag:
+
+```
+git tag v2.0.0
+git push origin v2.0.0
+```
+
+The build is unsigned, so the first launch needs a manual approval:
+- **macOS:** right-click the app → **Open** → **Open** (or run `xattr -dr com.apple.quarantine Student_Lookup.app`).
+- **Windows:** on the "Windows protected your PC" dialog, click **More info → Run anyway**.
 
 # Instructions
 
