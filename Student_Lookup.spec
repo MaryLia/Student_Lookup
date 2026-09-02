@@ -2,11 +2,11 @@
 
 
 a = Analysis(
-    ['Student Lookup.py'],
+    ['Student_Lookup.py'],
     pathex=[],
     binaries=[],
     datas=[],
-    hiddenimports=[],
+    hiddenimports=['openpyxl'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -46,12 +46,12 @@ app = BUNDLE(
     coll,
     name='Student Lookup.app',
     icon="Student_Lookup.icns",
-    version='1.0.0',
+    version='2.0.0',
     bundle_identifier="com.digiasati.Student_Lookup",
     osx_plist={
         'CFBundleName': 'Student Lookup',
-        'CFBundleShortVersionString': '1.0.0',
-        'CFBundleVersion': '1.0.0',
+        'CFBundleShortVersionString': '2.0.0',
+        'CFBundleVersion': '2.0.0',
         'CFBundleIdentifier': 'com.digiasati.Student_Lookup',
     },
 )

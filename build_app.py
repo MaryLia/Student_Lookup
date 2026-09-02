@@ -13,6 +13,9 @@ def build_app():
         "--onefile",
         "--noconsole",
         "--clean",
+        # Roster files are Excel workbooks; make sure openpyxl is bundled.
+        "--hidden-import=openpyxl",
+        "--collect-submodules=openpyxl",
     ]
     
     # Platform-specific arguments

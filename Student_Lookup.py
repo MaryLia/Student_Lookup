@@ -1,14 +1,23 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext
 import os
-import csv
 import json
 import re
 import sys
 from pathlib import Path
 
+try:
+    from roster_parser import read_roster, RosterError
+except ModuleNotFoundError as exc:
+    if exc.name == "openpyxl":
+        raise SystemExit(
+            "The 'openpyxl' package is required to read roster files.\n"
+            "Install it with:  pip install -r requirements.txt"
+        )
+    raise
+
 # Version
-APP_VERSION = "1.0.1"
+APP_VERSION = "2.0.0"
 
 # Get appropriate config path for different operating systems
 def get_config_path():
@@ -161,10 +170,10 @@ class StudentLookupApp(tk.Tk):
         self.config(menu=menu_bar)
     
     def on_load_rosters(self):
-        """Open file dialog to load roster CSVs"""
+        """Open file dialog to load roster spreadsheets"""
         file_paths = filedialog.askopenfilenames(
-            title="Select up to 9 roster CSV files",
-            filetypes=[("CSV Files", "*.csv"), ("All Files", "*.*")]
+            title="Select up to 9 roster Excel (.xlsx) files",
+            filetypes=[("Excel Files", "*.xlsx"), ("All Files", "*.*")]
         )
         
         if not file_paths:
@@ -187,101 +196,24 @@ class StudentLookupApp(tk.Tk):
         self.save_config()
     
     def load_rosters_from_files(self, file_paths):
-        """Load student data from the given CSV files"""
+        """Load student data from the given roster .xlsx files"""
         # Clear existing records
         self.student_records = []
         successful_files = []
         failed_files = []
-        
+
         for file_path in file_paths:
+            filename = os.path.basename(file_path)
             try:
-                # Extract course info from filename (e.g., "SOC-1101-W01.csv")
-                filename = os.path.basename(file_path)
-                
-                # Try to extract course info from filename
-                match = re.match(r"([A-Za-z]+)-(\w+)-(\w+)\.csv", filename)
-                
-                if match:
-                    course = match.group(1)
-                    course_number = match.group(2)
-                    section = match.group(3)
-                else:
-                    # If filename doesn't match expected format, use filename parts
-                    name_parts = filename.split(".")[0].split("-")
-                    if len(name_parts) >= 3:
-                        course = name_parts[0]
-                        course_number = name_parts[1]
-                        section = name_parts[2]
-                    else:
-                        # Use filename as course if no pattern matches
-                        course = filename.split(".")[0]
-                        course_number = ""
-                        section = ""
-                
-                # Read CSV and extract student data
-                with open(file_path, mode="r", encoding="utf-8-sig") as f:
-                    reader = csv.DictReader(f)
-                    
-                    # Check if required columns exist
-                    first_row = next(reader, None)
-                    if first_row is None:
-                        raise ValueError("CSV file is empty")
-                    
-                    # Reset file pointer and recreate reader
-                    f.seek(0)
-                    reader = csv.DictReader(f)
-                    
-                    # Process each student row
-                    for row in reader:
-                        # Extract student info, handling variations in column names
-                        student_name = (
-                            row.get("Student Name", "") or 
-                            row.get("Name", "") or 
-                            ""
-                        ).strip()
-                        
-                        student_id = (
-                            row.get("Student ID", "") or 
-                            row.get("ID", "") or 
-                            ""
-                        ).strip()
-                        
-                        class_level = (
-                            row.get("Class Level", "") or 
-                            row.get("Level", "") or 
-                            ""
-                        ).strip()
-                        
-                        email = (
-                            row.get("Preferred Email", "") or 
-                            row.get("Email", "") or 
-                            ""
-                        ).strip()
-                        
-                        # Skip rows with no student name
-                        if not student_name:
-                            continue
-                        
-                        # Create student record
-                        record = {
-                            "course": course,
-                            "course_number": course_number,
-                            "section": section,
-                            "student_name": student_name,
-                            "student_id": student_id,
-                            "class_level": class_level,
-                            "email": email,
-                            "source_file": filename
-                        }
-                        
-                        self.student_records.append(record)
-                
+                records = read_roster(file_path)
+                if not records:
+                    raise RosterError("No student rows found")
+                self.student_records.extend(records)
                 successful_files.append(filename)
-                
             except Exception as e:
                 print(f"Error loading file {file_path}: {e}")
-                failed_files.append(os.path.basename(file_path))
-        
+                failed_files.append(filename)
+
         # Update status bar
         self.update_status_bar()
         
@@ -361,16 +293,33 @@ class StudentLookupApp(tk.Tk):
     
     def display_student_details(self, student):
         """Format and display student details in the text area"""
-        # Format details with consistent spacing
-        details = f"""Name: {student['student_name']}
-ID: {student['student_id']}
-Class: {student['course']} {student['course_number']}
-Section: {student['section']}
-Level: {student['class_level']}
-Email: {student['email']}
-Source: {student['source_file']}
-"""
-        self.update_details_text(details)
+        # Prefer the course code from the spreadsheet, fall back to the
+        # course/number parsed from the file name.
+        course_line = student.get("course_code") or (
+            f"{student['course']} {student['course_number']}".strip()
+        )
+        if student.get("course_title"):
+            course_line = f"{course_line} - {student['course_title']}".strip(" -")
+
+        # Build the details as (label, value) pairs and skip empty values.
+        fields = [
+            ("Name", student.get("student_name", "")),
+            ("Pronoun", student.get("pronoun", "")),
+            ("ID", student.get("student_id", "")),
+            ("Email", student.get("email", "")),
+            ("Course", course_line),
+            ("Section", student.get("section", "")),
+            ("Term", student.get("term", "")),
+            ("Credits", student.get("credits", "")),
+            ("Academic Level", student.get("academic_level", "")),
+            ("Academic Unit", student.get("academic_unit", "")),
+            ("Program of Study", student.get("program_of_study", "")),
+            ("Registration Status", student.get("registration_status", "")),
+            ("Source", student.get("source_file", "")),
+        ]
+
+        details = "\n".join(f"{label}: {value}" for label, value in fields if value)
+        self.update_details_text(details + "\n")
     
     def update_details_text(self, text):
         """Update the details text widget with new content"""
@@ -408,7 +357,7 @@ Source: {student['source_file']}
 A simple application to search and manage student rosters.
 
 Features:
-• Load up to 9 CSV roster files
+• Load up to 9 Excel (.xlsx) roster files
 • Quick student name search
 • View detailed student information
 • Persistence between sessions
