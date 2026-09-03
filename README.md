@@ -52,7 +52,7 @@ The build is unsigned, so the first launch needs a manual approval:
 1. Download each course roster as an Excel (`.xlsx`) file (one file per course/section) from Cougarweb or whatever source you have available.
 2. Place the rosters in an easy to find folder (this folder will be referenced by the app). I call mine something like "SP25 Rosters" and keep it on my Onedrive.
 3. The app reads these columns from the spreadsheet: `Student`, `Pronoun`, `Email Address`, `Credits`, `Academic Level`, `Academic Unit`, `Program of Study`, `Registration Status`, and the compound `Student Course Registration` column (used for the course title and term). `Student` and `Email Address` are required; the header row does not have to be the first row.
-4. Rename your rosters so that they are titled `Course-Number-Section.xlsx` (e.g. `SOC-2210-W01.xlsx`). The course, number and section shown in the app come from the file name.
+4. Ensure your rosters have `Course-Number-Section.xlsx` (e.g. `SOC-2210-W01.xlsx`) in the title. The course, number and section shown in the app come from the file name. This should be standard from Workday student roster excel file downloads.
 5. After running the app, click on "Load Rosters" and select the rosters you wish to add to the app.
 
 ## How to Search for Students
